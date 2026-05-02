@@ -73,7 +73,7 @@ function Login() {
 
         <p className="auth-footer">
           Don't have an account?{" "}
-          <Link to="/signup">Create one</Link>
+          <useNavigate to="/signup">Create one</useNavigate>
         </p>
       </div>
     </div>

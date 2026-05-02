@@ -1,6 +1,6 @@
 import { useState } from "react";
 import API from "../api/axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,Link } from "react-router-dom";
 import "./auth.css";
 
 function Login() {
@@ -73,7 +73,7 @@ function Login() {
 
         <p className="auth-footer">
           Don't have an account?{" "}
-          <a href="/signup">Create one</a>
+          <Link to="/signup">Create one</Link>
         </p>
       </div>
     </div>

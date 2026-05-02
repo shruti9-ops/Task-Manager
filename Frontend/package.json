@@ -9,7 +9,7 @@
     "start": "npx serve dist -l $PORT"
   },
   "dependencies": {
-    "serve":"^14.x.x",
+    "serve": "^14.x.x",
     "axios": "^1.15.2",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",

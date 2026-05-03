@@ -12,7 +12,7 @@ const [dashData, setDashData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // Helper to get current user id from token
+
   const getUserId = () => {
     try {
       const token = localStorage.getItem("token");
@@ -24,7 +24,7 @@ const [dashData, setDashData] = useState(null);
   };
   const currentUserId = getUserId();
 
-  // Add project modal
+ 
   const [showModal, setShowModal] = useState(false);
   const [projName, setProjName] = useState("");
   const [projDesc, setProjDesc] = useState("");
@@ -76,12 +76,12 @@ const fetchAll = async () => {
   };
 
 const getCount = (status) => {
-    // First try to get from backend data
+   
     if (dashData?.statusStats) {
       const found = dashData.statusStats.find((s) => s._id && s._id.toUpperCase() === status.toUpperCase());
       if (found) return found.count;
     }
-    // Fallback: count from myTasks
+   
     return myTasks.filter(t => t.status && t.status.toUpperCase() === status.toUpperCase()).length;
   };
 
@@ -169,7 +169,7 @@ const getCount = (status) => {
               );
             })()}
 
-            {/* My Tasks List */}
+            
             <div className="section-label">My Tasks</div>
             {myTasks.length === 0 ? (
               <div className="empty">No tasks assigned yet</div>
@@ -197,7 +197,7 @@ const getCount = (status) => {
           </>
         )}
 
-        {/* ── Projects ── */}
+    
         <div className="section-header">
           <div className="section-label" style={{ margin: 0 }}>My Projects</div>
           <button className="add-proj-btn" onClick={() => setShowModal(true)}>+ New Project</button>
@@ -240,7 +240,7 @@ const getCount = (status) => {
         </div>
       </main>
 
-      {/* ── Create Project Modal ── */}
+    
       {showModal && (
         <div className="modal-overlay" onClick={() => setShowModal(false)}>
           <div className="modal-box" onClick={(e) => e.stopPropagation()}>

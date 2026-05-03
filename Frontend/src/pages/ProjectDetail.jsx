@@ -3,7 +3,6 @@ import { useParams, useLocation, useNavigate } from "react-router-dom";
 import API from "../api/axios";
 import "./projectdetail.css";
 
-// decode JWT to get current user id
 function getUserId() {
   try {
     const token = localStorage.getItem("token");
@@ -24,7 +23,6 @@ function ProjectDetail() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-// Add member
   const [memberUserId, setMemberUserId] = useState("");
   const [memberMsg, setMemberMsg] = useState({ text: "", type: "" });
   const [addingMember, setAddingMember] = useState(false);
@@ -33,10 +31,10 @@ function ProjectDetail() {
   const [userSearch, setUserSearch] = useState("");
   const [showUserDropdown, setShowUserDropdown] = useState(false);
 
-  // Remove member confirm
+
   const [removingId, setRemovingId] = useState(null);
 
-// Create task modal
+
   const [showTaskModal, setShowTaskModal] = useState(false);
   const [taskForm, setTaskForm] = useState({ title: "", description: "", assignedTo: "", dueDate: "", priority: "MEDIUM" });
   const [taskError, setTaskError] = useState("");
@@ -44,7 +42,7 @@ function ProjectDetail() {
   const [taskUserSearch, setTaskUserSearch] = useState("");
   const [showTaskUserDropdown, setShowTaskUserDropdown] = useState(false);
 
-  // Update task status
+
   const [updatingTaskId, setUpdatingTaskId] = useState(null);
 
   const token = localStorage.getItem("token");
@@ -53,13 +51,13 @@ function ProjectDetail() {
   const isAdmin = project?.Admin === currentUserId || project?.Admin?._id === currentUserId || project?.Admin?.toString() === currentUserId;
 
 useEffect(() => {
-    // Fetch fresh project data with populated members
+    
     const fetchProject = async () => {
       try {
         const res = await API.get(`/projects/${projectId}`, { headers });
         setProject(res.data.project);
         setProjectMembers(res.data.project.Members || []);
-        // Also fetch all users
+        
         fetchAllUsers();
       } catch (err) {
         console.error("Failed to fetch project", err);
@@ -83,7 +81,7 @@ const fetchTasks = async () => {
 
 const fetchAllUsers = async () => {
     try {
-      // Fetch all users for the dropdown
+      
       const res = await API.get("/users/getUsers", { headers });
       setAllUsers(res.data?.users || []);
     } catch (err) {
@@ -99,11 +97,11 @@ const handleAddMember = async () => {
       await API.post("/projects/addmember", { projectId, userId: memberUserId }, { headers });
       setMemberMsg({ text: "Member added successfully!", type: "success" });
       setMemberUserId("");
-      // Refresh project to get updated members list
+      
       const res = await API.get(`/projects/${projectId}`, { headers });
       setProject(res.data.project);
       setProjectMembers(res.data.project.Members || []);
-      // Refresh all users to get updated member details
+      
       fetchAllUsers();
     } catch (err) {
       setMemberMsg({ text: err.response?.data?.message || "Failed to add member", type: "error" });
@@ -116,7 +114,7 @@ const handleRemoveMember = async (userId) => {
     setRemovingId(userId);
     try {
       await API.post("/projects/removemember", { projectId, userId }, { headers });
-      // Refresh project to get updated members list
+     
       const res = await API.get(`/projects/${projectId}`, { headers });
       setProject(res.data.project);
       setProjectMembers(res.data.project.Members || []);
@@ -186,7 +184,7 @@ const handleRemoveMember = async (userId) => {
         {error && <div className="pd-error">{error}</div>}
 
         <div className="pd-grid">
-          {/* ── LEFT: Tasks ── */}
+        
           <div className="pd-left">
             <div className="section-header">
               <div className="section-label">Tasks</div>
@@ -238,7 +236,7 @@ const handleRemoveMember = async (userId) => {
             </div>
           </div>
 
-          {/* ── RIGHT: Members ── */}
+        
           <div className="pd-right">
             <div className="section-label">Members ({project?.Members?.length || 0})</div>
 
@@ -278,7 +276,6 @@ const handleRemoveMember = async (userId) => {
               })()}
             </div>
 
-{/* Add Member — only for admin */}
             {isAdmin && (
               <div className="add-member-box">
                 <div className="section-label" style={{ marginTop: 0 }}>Add Member</div>
@@ -306,7 +303,7 @@ const handleRemoveMember = async (userId) => {
                         onChange={(e) => setUserSearch(e.target.value)}
                         onClick={(e) => e.stopPropagation()}
                       />
-{/* Filter out users who are already members */}
+
                       {allUsers
                         .filter(u => {
                           const memberIds = projectMembers.map(m => (m._id || m).toString());
@@ -355,7 +352,7 @@ const handleRemoveMember = async (userId) => {
         </div>
       </main>
 
-      {/* ── Create Task Modal ── */}
+    
       {showTaskModal && (
         <div className="modal-overlay" onClick={() => setShowTaskModal(false)}>
           <div className="modal-box" onClick={(e) => e.stopPropagation()}>
@@ -380,7 +377,7 @@ const handleRemoveMember = async (userId) => {
 <div className="user-search-box" onClick={() => setShowTaskUserDropdown(!showTaskUserDropdown)}>
                   {taskForm.assignedTo ? (
                     <div className="selected-user">
-                      {/* Search in allUsers first, then projectMembers */}
+                     
                       {(allUsers.find(u => u._id === taskForm.assignedTo) || projectMembers.find(u => (u._id || u) === taskForm.assignedTo))?.name || "Select User"}
                     </div>
                   ) : (
@@ -398,7 +395,7 @@ const handleRemoveMember = async (userId) => {
                       onChange={(e) => setTaskUserSearch(e.target.value)}
                       onClick={(e) => e.stopPropagation()}
                     />
-{/* For task assignment, show only project members */}
+
                     {(projectMembers.length > 0 ? projectMembers : allUsers)
                       .filter(u => 
                         u.name?.toLowerCase().includes(taskUserSearch.toLowerCase()) ||
